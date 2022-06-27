@@ -20,7 +20,7 @@ RUN chown -R www-data: /app
 
 WORKDIR /app
 
-RUN php artisan migrate
-RUN php artisan db:seed
+RUN php artisan migrate --force
+RUN php artisan db:seed --force
 
 CMD sh /app/docker/startup.sh
