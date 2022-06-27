@@ -18,4 +18,9 @@ RUN cd /app && \
 
 RUN chown -R www-data: /app
 
+WORKDIR /app
+
+RUN php artisan migrate
+RUN php artisan db:seed
+
 CMD sh /app/docker/startup.sh
