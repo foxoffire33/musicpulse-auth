@@ -7,7 +7,7 @@ runBackgroundJobs() {
 }
 
 #Change the listen port
-sed -i "s,LISTEN_PORT,$WEB_PORT,g" /etc/nginx/nginx.conf
+sed -i "s,LISTEN_PORT,$PORT,g" /etc/nginx/nginx.conf
 
 #start Services
 php-fpm -D
