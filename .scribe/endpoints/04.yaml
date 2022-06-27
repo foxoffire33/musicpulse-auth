@@ -1,0 +1,349 @@
+name: 'User management'
+description: |-
+
+  APIs for managing users
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: users
+    metadata:
+      title: 'Summary of all users'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 422
+        content: '{"message": "Ongeldige aanvraag"}'
+        headers: []
+        description: '422, Ongeldig aanvraag'
+      -
+        status: 405
+        content: '{"message": "Niet toegestaan"}'
+        headers: []
+        description: '405, Niet toegestaan'
+      -
+        status: 500
+        content: '{"error":{"code":500,"message":"Wrong number of segments"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'users/{uuid}'
+    metadata:
+      title: 'View user'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      uuid:
+        name: uuid
+        description: ''
+        required: true
+        example: ut
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 404
+        content: '{"message": "Gebruiker niet gevonden"}'
+        headers: []
+        description: '404, gebruiker niet gevonden'
+      -
+        status: 422
+        content: '{"message": "Ongeldige aanvraag"}'
+        headers: []
+        description: '422, Ongeldig aanvraag'
+      -
+        status: 405
+        content: '{"message": "Niet toegestaan"}'
+        headers: []
+        description: '405, Niet toegestaan'
+      -
+        status: 500
+        content: '{"error":{"code":500,"message":"Static route \"\/users\/admin\" is shadowed by previously defined variable route \"\/users\/([^\/]+)\" for method \"GET\""}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: users/admin
+    metadata:
+      title: 'Summary of all devices'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 500
+        content: '{"error":{"code":500,"message":"Wrong number of segments"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'users/{uuid}'
+    metadata:
+      title: 'Delete user'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      uuid:
+        name: uuid
+        description: ''
+        required: true
+        example: ut
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 201
+        content: '{"message": "Gebruiker opgeslagen"}'
+        headers: []
+        description: '201, Succesvol opgeslagen'
+      -
+        status: 404
+        content: '{"message": "Gebruiker niet gevonden"}'
+        headers: []
+        description: '404, gebruiker niet gevonden'
+      -
+        status: 422
+        content: '{"message": "Ongeldige aanvraag"}'
+        headers: []
+        description: '422, Ongeldig aanvraag'
+      -
+        status: 405
+        content: '{"message": "Niet toegestaan"}'
+        headers: []
+        description: '405, Niet toegestaan'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: users/admin/trashed
+    metadata:
+      title: 'Summary of trashed users'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 500
+        content: '{"error":{"code":500,"message":"Wrong number of segments"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: users/admin/restore
+    metadata:
+      title: 'Restore deleted user'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message": "Restore successfully"}'
+        headers: []
+        description: '200, success'
+    responseFields: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'users/{uuid}'
+    metadata:
+      title: 'Update user'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      uuid:
+        name: uuid
+        description: ''
+        required: true
+        example: qui
+        type: string
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: true
+        example: dolores
+        type: string
+      password:
+        name: password
+        description: ''
+        required: true
+        example: quo
+        type: string
+      role:
+        name: role
+        description: ''
+        required: false
+        example: 9
+        type: integer
+    responses:
+      -
+        status: 201
+        content: '{"message": "Gebruiker opgeslagen"}'
+        headers: []
+        description: '201, Succesvol opgeslagen'
+      -
+        status: 404
+        content: '{"message": "Gebruiker niet gevonden"}'
+        headers: []
+        description: '404, gebruiker niet gevonden'
+      -
+        status: 422
+        content: '{"message": "Ongeldige aanvraag"}'
+        headers: []
+        description: '422, Ongeldig aanvraag'
+      -
+        status: 405
+        content: '{"message": "Niet toegestaan"}'
+        headers: []
+        description: '405, Niet toegestaan'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: users
+    metadata:
+      title: 'Create new user'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: true
+        example: quos
+        type: string
+      password:
+        name: password
+        description: ''
+        required: true
+        example: esse
+        type: string
+      role:
+        name: role
+        description: ''
+        required: false
+        example: 2
+        type: integer
+    responses:
+      -
+        status: 201
+        content: '{"message": "Gebruiker opgeslagen"}'
+        headers: []
+        description: '201, Succesvol opgeslagen'
+      -
+        status: 404
+        content: '{"message": "Gebruiker niet gevonden"}'
+        headers: []
+        description: '404, gebruiker niet gevonden'
+      -
+        status: 422
+        content: '{"message": "Ongeldige aanvraag"}'
+        headers: []
+        description: '422, Ongeldig aanvraag'
+      -
+        status: 405
+        content: '{"message": "Niet geautoriseerd"}'
+        headers: []
+        description: '405, Niet geautoriseerd'
+    responseFields: []
+  -
+    httpMethods:
+      - DELETE
+    uri: users/admin/force-delete
+    metadata:
+      title: 'Force delete device'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message": "Deleted Successfully"}'
+        headers: []
+        description: '200, success'
+      -
+        status: 404
+        content: '{"message": "User not found"}'
+        headers: []
+        description: '404, not found'
+    responseFields: []

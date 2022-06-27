@@ -1,0 +1,4253 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>DXMusic Authenticatie API</title>
+
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
+    <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/obsidian.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
+
+    <style id="language-style">
+        /* starts out as display none and is replaced with js later  */
+                    body .content .bash-example code { display: none; }
+                    body .content .php-example code { display: none; }
+                    body .content .javascript-example code { display: none; }
+                    body .content .python-example code { display: none; }
+            </style>
+
+
+    <script src="../docs/js/theme-default-3.19.1.js"></script>
+
+</head>
+
+<body data-languages="[&quot;bash&quot;,&quot;php&quot;,&quot;javascript&quot;,&quot;python&quot;]">
+
+<a href="#" id="nav-button">
+    <span>
+        MENU
+        <img src="../docs/images/navbar.png" alt="navbar-image" />
+    </span>
+</a>
+<div class="tocify-wrapper">
+    
+            <div class="lang-selector">
+                                            <button type="button" class="lang-button" data-language-name="bash">bash</button>
+                                            <button type="button" class="lang-button" data-language-name="php">php</button>
+                                            <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+                                            <button type="button" class="lang-button" data-language-name="python">python</button>
+                    </div>
+    
+    <div class="search">
+        <input type="text" class="search" id="input-search" placeholder="Search">
+    </div>
+
+    <div id="toc">
+                                                                            <ul id="tocify-header-0" class="tocify-header">
+                    <li class="tocify-item level-1" data-unique="introduction">
+                        <a href="#introduction">Introduction</a>
+                    </li>
+                                            
+                                                                    </ul>
+                                                <ul id="tocify-header-1" class="tocify-header">
+                    <li class="tocify-item level-1" data-unique="authenticating-requests">
+                        <a href="#authenticating-requests">Authenticating requests</a>
+                    </li>
+                                            
+                                                </ul>
+                    
+                    <ul id="tocify-header-2" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="authentication">
+                    <a href="#authentication">Authentication</a>
+                </li>
+                                    <ul id="tocify-subheader-authentication" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="authentication-POST-">
+                        <a href="#authentication-POST-">Basic login</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="authentication-GETjwt">
+                        <a href="#authentication-GETjwt">Renew token</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-3" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="devices-management">
+                    <a href="#devices-management">Devices management</a>
+                </li>
+                                    <ul id="tocify-subheader-devices-management" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="devices-management-GETdevices">
+                        <a href="#devices-management-GETdevices">Summary of all user devices</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-GETdevices--id-">
+                        <a href="#devices-management-GETdevices--id-">View user device</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-GETdevices-admin">
+                        <a href="#devices-management-GETdevices-admin">Summary of all devices</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-DELETEdevices--id-">
+                        <a href="#devices-management-DELETEdevices--id-">Delete an device</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-GETdevices-admin-trashed">
+                        <a href="#devices-management-GETdevices-admin-trashed">Summary of trashed devices</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-POSTdevices">
+                        <a href="#devices-management-POSTdevices">Create new device for user</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-POSTdevices-admin-restore">
+                        <a href="#devices-management-POSTdevices-admin-restore">Restore deleted device</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-PUTdevices--id-">
+                        <a href="#devices-management-PUTdevices--id-">Update existing device</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="devices-management-DELETEdevices-admin-force-delete">
+                        <a href="#devices-management-DELETEdevices-admin-force-delete">Force delete device</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-4" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="general">
+                    <a href="#general">General</a>
+                </li>
+                                    <ul id="tocify-subheader-general" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="general-GET-">
+                        <a href="#general-GET-">Get API version</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-5" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="push-notifications">
+                    <a href="#push-notifications">Push Notifications</a>
+                </li>
+                                    <ul id="tocify-subheader-push-notifications" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="push-notifications-POSTdevices-admin-notification-token">
+                        <a href="#push-notifications-POSTdevices-admin-notification-token">Logout all devices</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="push-notifications-POSTdevices--uuid--notification-alert">
+                        <a href="#push-notifications-POSTdevices--uuid--notification-alert">Send alert to device</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="push-notifications-POSTdevices--uuid--notification-playlists">
+                        <a href="#push-notifications-POSTdevices--uuid--notification-playlists">Refresh playlists on device</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="push-notifications-POSTdevices--uuid--notification-token">
+                        <a href="#push-notifications-POSTdevices--uuid--notification-token">Logout device</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="push-notifications-POSTdevices-admin-notification-alert">
+                        <a href="#push-notifications-POSTdevices-admin-notification-alert">Send alert to all devices</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-6" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="user-management">
+                    <a href="#user-management">User management</a>
+                </li>
+                                    <ul id="tocify-subheader-user-management" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="user-management-GETusers">
+                        <a href="#user-management-GETusers">Summary of all users</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-GETusers--uuid-">
+                        <a href="#user-management-GETusers--uuid-">View user</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-GETusers-admin">
+                        <a href="#user-management-GETusers-admin">Summary of all devices</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-DELETEusers--uuid-">
+                        <a href="#user-management-DELETEusers--uuid-">Delete user</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-GETusers-admin-trashed">
+                        <a href="#user-management-GETusers-admin-trashed">Summary of trashed users</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-POSTusers-admin-restore">
+                        <a href="#user-management-POSTusers-admin-restore">Restore deleted user</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-PUTusers--uuid-">
+                        <a href="#user-management-PUTusers--uuid-">Update user</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-POSTusers">
+                        <a href="#user-management-POSTusers">Create new user</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="user-management-DELETEusers-admin-force-delete">
+                        <a href="#user-management-DELETEusers-admin-force-delete">Force delete device</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+        
+                        
+            </div>
+
+            <ul class="toc-footer" id="toc-footer">
+                            <li><a href="../docs/collection.json">View Postman collection</a></li>
+                            <li><a href="../docs/openapi.yaml">View OpenAPI spec</a></li>
+                            <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
+                    </ul>
+        <ul class="toc-footer" id="last-updated">
+        <li>Last updated: December 17 2021</li>
+    </ul>
+</div>
+
+<div class="page-wrapper">
+    <div class="dark-box"></div>
+    <div class="content">
+        <h1 id="introduction">Introduction</h1>
+<p>This documentation aims to provide all the information you need to work with our API.</p>
+<aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
+You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
+<blockquote>
+<p>Base URL</p>
+</blockquote>
+<pre><code class="language-yaml">http://localhost/authenticate/</code></pre>
+
+        <h1 id="authenticating-requests">Authenticating requests</h1>
+<p>To authenticate requests, include an <strong><code>Authorization</code></strong> header with the value <strong><code>"Bearer {TOKEN}"</code></strong>.</p>
+<p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
+<p>Als u zich aanmeld krijgt u een Json Web Token. als u account heeft neem dan contact op met ons</p>
+
+        <h1 id="authentication">Authentication</h1>
+
+    <p>APIs for authenticateion</p>
+
+            <h2 id="authentication-POST-">Basic login</h2>
+
+<p>
+</p>
+
+<p>This is used for first time authentication. when your user has the role <b>Deivce</b> the devoceToken parameter is required</p>
+
+<span id="example-requests-POST-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"email\": \"development@dxmusic.nl\",
+    \"password\": \"voluptatem\",
+    \"deviceToken\": \"aliquid\"
+}"
+</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'email' =&gt; 'development@dxmusic.nl',
+            'password' =&gt; 'voluptatem',
+            'deviceToken' =&gt; 'aliquid',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "email": "development@dxmusic.nl",
+    "password": "voluptatem",
+    "deviceToken": "aliquid"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate//'
+payload = {
+    "email": "development@dxmusic.nl",
+    "password": "voluptatem",
+    "deviceToken": "aliquid"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POST-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+ &quot;token&quot;: &quot;String&quot;
+}
+ @response 401 &quot;error&quot;: {
+ &quot;code&quot;: 401,
+ &quot;message&quot;: &quot;Invalid credentials.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (429):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">error&quot;: {
+ &quot;code&quot;: 429,
+ &quot;message&quot;: &quot;Too Many Attempts.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POST-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POST-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POST-"></code></pre>
+</span>
+<span id="execution-error-POST-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POST-"></code></pre>
+</span>
+<form id="form-POST-" data-method="POST"
+      data-path="/"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POST-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>/</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POST-"
+               value="development@dxmusic.nl"
+               data-component="body" hidden>
+    <br>
+<p>E-mail of the user.</p>
+        </p>
+                <p>
+            <b><code>password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="password"
+               data-endpoint="POST-"
+               value="voluptatem"
+               data-component="body" hidden>
+    <br>
+<p>Password of the user.</p>
+        </p>
+                <p>
+            <b><code>deviceToken</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="deviceToken"
+               data-endpoint="POST-"
+               value="aliquid"
+               data-component="body" hidden>
+    <br>
+<p>Required when user role is deivce.</p>
+        </p>
+        </form>
+
+            <h2 id="authentication-GETjwt">Renew token</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>With this endpoint you can request an new token, the current one should be valid.</p>
+
+<span id="example-requests-GETjwt">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/jwt" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/jwt',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/jwt"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/jwt'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETjwt">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+ &quot;token&quot;: &quot;String&quot;
+}
+ @response 401 &quot;error&quot;: {
+ &quot;code&quot;: 401,
+ &quot;message&quot;: &quot;Unauthorized.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (429):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">error&quot;: {
+ &quot;code&quot;: 429,
+ &quot;message&quot;: &quot;Too Many Attempts.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETjwt" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETjwt"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETjwt"></code></pre>
+</span>
+<span id="execution-error-GETjwt" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETjwt"></code></pre>
+</span>
+<form id="form-GETjwt" data-method="GET"
+      data-path="jwt"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETjwt', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>jwt</code></b>
+        </p>
+                <p>
+            <label id="auth-GETjwt" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETjwt"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+        <h1 id="devices-management">Devices management</h1>
+
+    <p>APIs for managing devices and comulicateing with devices.</p>
+
+            <h2 id="devices-management-GETdevices">Summary of all user devices</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETdevices">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/devices" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/devices',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETdevices">
+            <blockquote>
+            <p>Example response (405, Niet geautoriseerd):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet geautoriseerd&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">status 200
+[{
+&quot;deviceID&quot;: &quot;0FDF668C-074A-4A62-BCEC-3CBEDE25C524&quot;,
+&quot;deviceName&quot;: &quot;Luxe mp3 speler&quot;,
+&quot;deviceToken&quot;: &quot;e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315&quot;,
+&quot;deviceOS&quot;: &quot;IOS&quot;,
+&quot;OSVersion&quot;: 15.2,
+&quot;AppVersion&quot;: 1.2,
+}]</code>
+ </pre>
+    </span>
+<span id="execution-results-GETdevices" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETdevices"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETdevices"></code></pre>
+</span>
+<span id="execution-error-GETdevices" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETdevices"></code></pre>
+</span>
+<form id="form-GETdevices" data-method="GET"
+      data-path="devices"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETdevices', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>devices</code></b>
+        </p>
+                <p>
+            <label id="auth-GETdevices" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETdevices"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="devices-management-GETdevices--id-">View user device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETdevices--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/devices/veniam" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/devices/veniam',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/veniam"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/veniam'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETdevices--id-">
+            <blockquote>
+            <p>Example response (201, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Created Successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, unauthirzed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthirzed&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The given data was invalid&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">status 200
+{
+&quot;deviceID&quot;: &quot;0FDF668C-074A-4A62-BCEC-3CBEDE25C524&quot;,
+&quot;deviceName&quot;: &quot;Luxe mp3 speler&quot;,
+&quot;deviceToken&quot;: &quot;e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315&quot;,
+&quot;deviceOS&quot;: &quot;IOS&quot;,
+&quot;OSVersion&quot;: 15.2,
+&quot;AppVersion&quot;: 1.2,
+},</code>
+ </pre>
+    </span>
+<span id="execution-results-GETdevices--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETdevices--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETdevices--id-"></code></pre>
+</span>
+<span id="execution-error-GETdevices--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETdevices--id-"></code></pre>
+</span>
+<form id="form-GETdevices--id-" data-method="GET"
+      data-path="devices/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETdevices--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>devices/{id}</code></b>
+        </p>
+                <p>
+            <label id="auth-GETdevices--id-" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETdevices--id-"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="id"
+               data-endpoint="GETdevices--id-"
+               value="veniam"
+               data-component="url" hidden>
+    <br>
+<p>uuid required</p>
+            </p>
+                    </form>
+
+            <h2 id="devices-management-GETdevices-admin">Summary of all devices</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETdevices-admin">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/devices/admin" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/devices/admin',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/admin"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/admin'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETdevices-admin">
+            <blockquote>
+            <p>Example response (500):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;error&quot;: {
+        &quot;code&quot;: 500,
+        &quot;message&quot;: &quot;Wrong number of segments&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETdevices-admin" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETdevices-admin"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETdevices-admin"></code></pre>
+</span>
+<span id="execution-error-GETdevices-admin" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETdevices-admin"></code></pre>
+</span>
+<form id="form-GETdevices-admin" data-method="GET"
+      data-path="devices/admin"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETdevices-admin', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>devices/admin</code></b>
+        </p>
+                <p>
+            <label id="auth-GETdevices-admin" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETdevices-admin"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="devices-management-DELETEdevices--id-">Delete an device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEdevices--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost/authenticate/devices/dolorem" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost/authenticate/devices/dolorem',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/dolorem"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/dolorem'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEdevices--id-">
+            <blockquote>
+            <p>Example response (200,201, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Deleted Successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, apparaat niet gevonden):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Apparaat niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Niet geautoriseerd):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet geautoriseerd&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEdevices--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEdevices--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEdevices--id-"></code></pre>
+</span>
+<span id="execution-error-DELETEdevices--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEdevices--id-"></code></pre>
+</span>
+<form id="form-DELETEdevices--id-" data-method="DELETE"
+      data-path="devices/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEdevices--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>devices/{id}</code></b>
+        </p>
+                <p>
+            <label id="auth-DELETEdevices--id-" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="DELETEdevices--id-"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="id"
+               data-endpoint="DELETEdevices--id-"
+               value="dolorem"
+               data-component="url" hidden>
+    <br>
+<p>uuid required</p>
+            </p>
+                    </form>
+
+            <h2 id="devices-management-GETdevices-admin-trashed">Summary of trashed devices</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETdevices-admin-trashed">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/devices/admin/trashed" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/devices/admin/trashed',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/admin/trashed"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/admin/trashed'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETdevices-admin-trashed">
+            <blockquote>
+            <p>Example response (500):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;error&quot;: {
+        &quot;code&quot;: 500,
+        &quot;message&quot;: &quot;Wrong number of segments&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETdevices-admin-trashed" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETdevices-admin-trashed"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETdevices-admin-trashed"></code></pre>
+</span>
+<span id="execution-error-GETdevices-admin-trashed" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETdevices-admin-trashed"></code></pre>
+</span>
+<form id="form-GETdevices-admin-trashed" data-method="GET"
+      data-path="devices/admin/trashed"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETdevices-admin-trashed', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>devices/admin/trashed</code></b>
+        </p>
+                <p>
+            <label id="auth-GETdevices-admin-trashed" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETdevices-admin-trashed"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="devices-management-POSTdevices">Create new device for user</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTdevices">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/devices" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"deviceID\": \"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",
+    \"deviceName\": \"Luxe mp3 speler\",
+    \"deviceToken\": \"12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",
+    \"deviceOS\": \"IOS\",
+    \"OSVersion\": 15.2,
+    \"AppVersion\": 1.2
+}"
+</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/devices',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'deviceID' =&gt; '0FDF668C-074A-4A62-BCEC-3CBEDE25C524',
+            'deviceName' =&gt; 'Luxe mp3 speler',
+            'deviceToken' =&gt; '12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315',
+            'deviceOS' =&gt; 'IOS',
+            'OSVersion' =&gt; 15.2,
+            'AppVersion' =&gt; 1.2,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "deviceID": "0FDF668C-074A-4A62-BCEC-3CBEDE25C524",
+    "deviceName": "Luxe mp3 speler",
+    "deviceToken": "12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315",
+    "deviceOS": "IOS",
+    "OSVersion": 15.2,
+    "AppVersion": 1.2
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices'
+payload = {
+    "deviceID": "0FDF668C-074A-4A62-BCEC-3CBEDE25C524",
+    "deviceName": "Luxe mp3 speler",
+    "deviceToken": "12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315",
+    "deviceOS": "IOS",
+    "OSVersion": 15.2,
+    "AppVersion": 1.2
+}
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTdevices">
+            <blockquote>
+            <p>Example response (201, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Created Successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, unauthirzed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthirzed&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The given data was invalid&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTdevices" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTdevices"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTdevices"></code></pre>
+</span>
+<span id="execution-error-POSTdevices" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTdevices"></code></pre>
+</span>
+<form id="form-POSTdevices" data-method="POST"
+      data-path="devices"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTdevices', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>devices</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTdevices" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTdevices"
+                                                                data-component="header"></label>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>deviceID</code></b>&nbsp;&nbsp;<small>uuid</small>  &nbsp;
+                <input type="text"
+               name="deviceID"
+               data-endpoint="POSTdevices"
+               value="0FDF668C-074A-4A62-BCEC-3CBEDE25C524"
+               data-component="body" hidden>
+    <br>
+<p>Het unique id die door de fabrikant gegenereerd is</p>
+        </p>
+                <p>
+            <b><code>deviceName</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="deviceName"
+               data-endpoint="POSTdevices"
+               value="Luxe mp3 speler"
+               data-component="body" hidden>
+    <br>
+<p>De naam die de gebruiker aan eht Appraat heeft gegeven</p>
+        </p>
+                <p>
+            <b><code>deviceToken</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="deviceToken"
+               data-endpoint="POSTdevices"
+               value="12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315"
+               data-component="body" hidden>
+    <br>
+<p>De token voor push notificaties</p>
+        </p>
+                <p>
+            <b><code>deviceOS</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="deviceOS"
+               data-endpoint="POSTdevices"
+               value="IOS"
+               data-component="body" hidden>
+    <br>
+<p>Het bestuurings systeem dat het Apprraat draait</p>
+        </p>
+                <p>
+            <b><code>OSVersion</code></b>&nbsp;&nbsp;<small>number</small>  &nbsp;
+                <input type="number"
+               name="OSVersion"
+               data-endpoint="POSTdevices"
+               value="15.2"
+               data-component="body" hidden>
+    <br>
+<p>de versie van het bestuuringssysteem</p>
+        </p>
+                <p>
+            <b><code>AppVersion</code></b>&nbsp;&nbsp;<small>number</small>  &nbsp;
+                <input type="number"
+               name="AppVersion"
+               data-endpoint="POSTdevices"
+               value="1.2"
+               data-component="body" hidden>
+    <br>
+<p>de versie van de app,</p>
+        </p>
+        </form>
+
+            <h2 id="devices-management-POSTdevices-admin-restore">Restore deleted device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTdevices-admin-restore">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/devices/admin/restore" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/devices/admin/restore',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/admin/restore"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/admin/restore'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTdevices-admin-restore">
+            <blockquote>
+            <p>Example response (200,201, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Restore successfully&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTdevices-admin-restore" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTdevices-admin-restore"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTdevices-admin-restore"></code></pre>
+</span>
+<span id="execution-error-POSTdevices-admin-restore" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTdevices-admin-restore"></code></pre>
+</span>
+<form id="form-POSTdevices-admin-restore" data-method="POST"
+      data-path="devices/admin/restore"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTdevices-admin-restore', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>devices/admin/restore</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTdevices-admin-restore" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTdevices-admin-restore"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="devices-management-PUTdevices--id-">Update existing device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-PUTdevices--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost/authenticate/devices/dolor" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"deviceID\": \"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",
+    \"deviceName\": \"Luxe mp3 speler\",
+    \"deviceToken\": \"12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",
+    \"deviceOS\": \"IOS\",
+    \"OSVersion\": 15.2,
+    \"AppVersion\": 1.2
+}"
+</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://localhost/authenticate/devices/dolor',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'deviceID' =&gt; '0FDF668C-074A-4A62-BCEC-3CBEDE25C524',
+            'deviceName' =&gt; 'Luxe mp3 speler',
+            'deviceToken' =&gt; '12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315',
+            'deviceOS' =&gt; 'IOS',
+            'OSVersion' =&gt; 15.2,
+            'AppVersion' =&gt; 1.2,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/dolor"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "deviceID": "0FDF668C-074A-4A62-BCEC-3CBEDE25C524",
+    "deviceName": "Luxe mp3 speler",
+    "deviceToken": "12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315",
+    "deviceOS": "IOS",
+    "OSVersion": 15.2,
+    "AppVersion": 1.2
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/dolor'
+payload = {
+    "deviceID": "0FDF668C-074A-4A62-BCEC-3CBEDE25C524",
+    "deviceName": "Luxe mp3 speler",
+    "deviceToken": "12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315",
+    "deviceOS": "IOS",
+    "OSVersion": 15.2,
+    "AppVersion": 1.2
+}
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTdevices--id-">
+            <blockquote>
+            <p>Example response (201, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Updated Successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, unauthirzed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthirzed&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;The given data was invalid&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTdevices--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTdevices--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTdevices--id-"></code></pre>
+</span>
+<span id="execution-error-PUTdevices--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTdevices--id-"></code></pre>
+</span>
+<form id="form-PUTdevices--id-" data-method="PUT"
+      data-path="devices/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTdevices--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>devices/{id}</code></b>
+        </p>
+                <p>
+            <label id="auth-PUTdevices--id-" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="PUTdevices--id-"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="id"
+               data-endpoint="PUTdevices--id-"
+               value="dolor"
+               data-component="url" hidden>
+    <br>
+<p>uuid required</p>
+            </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>deviceID</code></b>&nbsp;&nbsp;<small>uuid</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="deviceID"
+               data-endpoint="PUTdevices--id-"
+               value="0FDF668C-074A-4A62-BCEC-3CBEDE25C524"
+               data-component="body" hidden>
+    <br>
+<p>Het unique id die door de fabrikant gegenereerd is</p>
+        </p>
+                <p>
+            <b><code>deviceName</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="deviceName"
+               data-endpoint="PUTdevices--id-"
+               value="Luxe mp3 speler"
+               data-component="body" hidden>
+    <br>
+<p>De naam die de gebruiker aan eht Appraat heeft gegeven</p>
+        </p>
+                <p>
+            <b><code>deviceToken</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="deviceToken"
+               data-endpoint="PUTdevices--id-"
+               value="12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315"
+               data-component="body" hidden>
+    <br>
+<p>De token voor push notificaties</p>
+        </p>
+                <p>
+            <b><code>deviceOS</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="deviceOS"
+               data-endpoint="PUTdevices--id-"
+               value="IOS"
+               data-component="body" hidden>
+    <br>
+<p>Het bestuurings systeem dat het Apprraat draait</p>
+        </p>
+                <p>
+            <b><code>OSVersion</code></b>&nbsp;&nbsp;<small>number</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="OSVersion"
+               data-endpoint="PUTdevices--id-"
+               value="15.2"
+               data-component="body" hidden>
+    <br>
+<p>de versie van het bestuuringssysteem</p>
+        </p>
+                <p>
+            <b><code>AppVersion</code></b>&nbsp;&nbsp;<small>number</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="AppVersion"
+               data-endpoint="PUTdevices--id-"
+               value="1.2"
+               data-component="body" hidden>
+    <br>
+<p>de versie van de app,</p>
+        </p>
+        </form>
+
+            <h2 id="devices-management-DELETEdevices-admin-force-delete">Force delete device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEdevices-admin-force-delete">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost/authenticate/devices/admin/force-delete" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost/authenticate/devices/admin/force-delete',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/admin/force-delete"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/admin/force-delete'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEdevices-admin-force-delete">
+            <blockquote>
+            <p>Example response (200,201, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Deleted Successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, apparaat niet gevonden):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Apparaat niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Niet geautoriseerd):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet geautoriseerd&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEdevices-admin-force-delete" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEdevices-admin-force-delete"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEdevices-admin-force-delete"></code></pre>
+</span>
+<span id="execution-error-DELETEdevices-admin-force-delete" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEdevices-admin-force-delete"></code></pre>
+</span>
+<form id="form-DELETEdevices-admin-force-delete" data-method="DELETE"
+      data-path="devices/admin/force-delete"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEdevices-admin-force-delete', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>devices/admin/force-delete</code></b>
+        </p>
+                <p>
+            <label id="auth-DELETEdevices-admin-force-delete" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="DELETEdevices-admin-force-delete"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+        <h1 id="general">General</h1>
+
+    
+
+            <h2 id="general-GET-">Get API version</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GET-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate//'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GET-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;application&quot;: &quot;DXMusic Authenticate API&quot;,
+    &quot;version&quot;: &quot;0.1&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GET-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GET-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GET-"></code></pre>
+</span>
+<span id="execution-error-GET-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GET-"></code></pre>
+</span>
+<form id="form-GET-" data-method="GET"
+      data-path="/"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GET-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>/</code></b>
+        </p>
+                    </form>
+
+        <h1 id="push-notifications">Push Notifications</h1>
+
+    <p>APIs for sending push notifications,</p>
+
+            <h2 id="push-notifications-POSTdevices-admin-notification-token">Logout all devices</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTdevices-admin-notification-token">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/devices/admin/notification/token" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/devices/admin/notification/token',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/admin/notification/token"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/admin/notification/token'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTdevices-admin-notification-token">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;alert send.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, device not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Device not found&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, bad request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Bad request&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Unauthorized request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthorized request&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTdevices-admin-notification-token" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTdevices-admin-notification-token"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTdevices-admin-notification-token"></code></pre>
+</span>
+<span id="execution-error-POSTdevices-admin-notification-token" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTdevices-admin-notification-token"></code></pre>
+</span>
+<form id="form-POSTdevices-admin-notification-token" data-method="POST"
+      data-path="devices/admin/notification/token"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTdevices-admin-notification-token', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>devices/admin/notification/token</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTdevices-admin-notification-token" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTdevices-admin-notification-token"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="push-notifications-POSTdevices--uuid--notification-alert">Send alert to device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTdevices--uuid--notification-alert">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/devices/id/notification/alert?uuid=et" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/devices/id/notification/alert',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'uuid'=&gt; 'et',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/id/notification/alert"
+);
+
+const params = {
+    "uuid": "et",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/id/notification/alert'
+params = {
+  'uuid': 'et',
+}
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, params=params)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTdevices--uuid--notification-alert">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;alert send.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, device not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Device not found&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, bad request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Bad request&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Unauthorized request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthorized request&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTdevices--uuid--notification-alert" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTdevices--uuid--notification-alert"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTdevices--uuid--notification-alert"></code></pre>
+</span>
+<span id="execution-error-POSTdevices--uuid--notification-alert" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTdevices--uuid--notification-alert"></code></pre>
+</span>
+<form id="form-POSTdevices--uuid--notification-alert" data-method="POST"
+      data-path="devices/{uuid}/notification/alert"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTdevices--uuid--notification-alert', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>devices/{uuid}/notification/alert</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTdevices--uuid--notification-alert" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTdevices--uuid--notification-alert"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="POSTdevices--uuid--notification-alert"
+               value="id"
+               data-component="url" hidden>
+    <br>
+
+            </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="POSTdevices--uuid--notification-alert"
+               value="et"
+               data-component="query" hidden>
+    <br>
+<p>uuid The uuid of the Device.</p>
+            </p>
+                </form>
+
+            <h2 id="push-notifications-POSTdevices--uuid--notification-playlists">Refresh playlists on device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTdevices--uuid--notification-playlists">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/devices/iure/notification/playlists" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"uuid\": \"alias\"
+}"
+</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/devices/iure/notification/playlists',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'uuid' =&gt; 'alias',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/iure/notification/playlists"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "uuid": "alias"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/iure/notification/playlists'
+payload = {
+    "uuid": "alias"
+}
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTdevices--uuid--notification-playlists">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;alert send.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, device not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Device not found&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, bad request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Bad request&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Unauthorized request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthorized request&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTdevices--uuid--notification-playlists" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTdevices--uuid--notification-playlists"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTdevices--uuid--notification-playlists"></code></pre>
+</span>
+<span id="execution-error-POSTdevices--uuid--notification-playlists" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTdevices--uuid--notification-playlists"></code></pre>
+</span>
+<form id="form-POSTdevices--uuid--notification-playlists" data-method="POST"
+      data-path="devices/{uuid}/notification/playlists"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTdevices--uuid--notification-playlists', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>devices/{uuid}/notification/playlists</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTdevices--uuid--notification-playlists" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTdevices--uuid--notification-playlists"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="POSTdevices--uuid--notification-playlists"
+               value="iure"
+               data-component="url" hidden>
+    <br>
+
+            </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>uuid</code></b>&nbsp;&nbsp;<small>uuid</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="POSTdevices--uuid--notification-playlists"
+               value="alias"
+               data-component="body" hidden>
+    <br>
+<p>The uuid of the Device.</p>
+        </p>
+        </form>
+
+            <h2 id="push-notifications-POSTdevices--uuid--notification-token">Logout device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTdevices--uuid--notification-token">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/devices/minima/notification/token" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"uuid\": \"voluptatem\"
+}"
+</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/devices/minima/notification/token',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'uuid' =&gt; 'voluptatem',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/minima/notification/token"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "uuid": "voluptatem"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/minima/notification/token'
+payload = {
+    "uuid": "voluptatem"
+}
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTdevices--uuid--notification-token">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;alert send.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, device not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Device not found&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, bad request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Bad request&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Unauthorized request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthorized request&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTdevices--uuid--notification-token" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTdevices--uuid--notification-token"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTdevices--uuid--notification-token"></code></pre>
+</span>
+<span id="execution-error-POSTdevices--uuid--notification-token" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTdevices--uuid--notification-token"></code></pre>
+</span>
+<form id="form-POSTdevices--uuid--notification-token" data-method="POST"
+      data-path="devices/{uuid}/notification/token"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTdevices--uuid--notification-token', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>devices/{uuid}/notification/token</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTdevices--uuid--notification-token" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTdevices--uuid--notification-token"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="POSTdevices--uuid--notification-token"
+               value="minima"
+               data-component="url" hidden>
+    <br>
+
+            </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>uuid</code></b>&nbsp;&nbsp;<small>uuid</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="POSTdevices--uuid--notification-token"
+               value="voluptatem"
+               data-component="body" hidden>
+    <br>
+<p>The uuid of the Device.</p>
+        </p>
+        </form>
+
+            <h2 id="push-notifications-POSTdevices-admin-notification-alert">Send alert to all devices</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTdevices-admin-notification-alert">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/devices/admin/notification/alert" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/devices/admin/notification/alert',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/devices/admin/notification/alert"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/devices/admin/notification/alert'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTdevices-admin-notification-alert">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;alert send.&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, device not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Device not found&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, bad request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Bad request&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Unauthorized request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Unauthorized request&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTdevices-admin-notification-alert" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTdevices-admin-notification-alert"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTdevices-admin-notification-alert"></code></pre>
+</span>
+<span id="execution-error-POSTdevices-admin-notification-alert" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTdevices-admin-notification-alert"></code></pre>
+</span>
+<form id="form-POSTdevices-admin-notification-alert" data-method="POST"
+      data-path="devices/admin/notification/alert"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTdevices-admin-notification-alert', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>devices/admin/notification/alert</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTdevices-admin-notification-alert" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTdevices-admin-notification-alert"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+        <h1 id="user-management">User management</h1>
+
+    <p>APIs for managing users</p>
+
+            <h2 id="user-management-GETusers">Summary of all users</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETusers">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/users" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/users',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETusers">
+            <blockquote>
+            <p>Example response (422, Ongeldig aanvraag):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Ongeldige aanvraag&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Niet toegestaan):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet toegestaan&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;error&quot;: {
+        &quot;code&quot;: 500,
+        &quot;message&quot;: &quot;Wrong number of segments&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETusers" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETusers"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETusers"></code></pre>
+</span>
+<span id="execution-error-GETusers" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETusers"></code></pre>
+</span>
+<form id="form-GETusers" data-method="GET"
+      data-path="users"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETusers', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>users</code></b>
+        </p>
+                <p>
+            <label id="auth-GETusers" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETusers"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="user-management-GETusers--uuid-">View user</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETusers--uuid-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/users/ut" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/users/ut',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users/ut"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users/ut'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETusers--uuid-">
+            <blockquote>
+            <p>Example response (404, gebruiker niet gevonden):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Gebruiker niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Ongeldig aanvraag):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Ongeldige aanvraag&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Niet toegestaan):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet toegestaan&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;error&quot;: {
+        &quot;code&quot;: 500,
+        &quot;message&quot;: &quot;Static route \&quot;/users/admin\&quot; is shadowed by previously defined variable route \&quot;/users/([^/]+)\&quot; for method \&quot;GET\&quot;&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETusers--uuid-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETusers--uuid-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETusers--uuid-"></code></pre>
+</span>
+<span id="execution-error-GETusers--uuid-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETusers--uuid-"></code></pre>
+</span>
+<form id="form-GETusers--uuid-" data-method="GET"
+      data-path="users/{uuid}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETusers--uuid-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>users/{uuid}</code></b>
+        </p>
+                <p>
+            <label id="auth-GETusers--uuid-" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETusers--uuid-"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="GETusers--uuid-"
+               value="ut"
+               data-component="url" hidden>
+    <br>
+
+            </p>
+                    </form>
+
+            <h2 id="user-management-GETusers-admin">Summary of all devices</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETusers-admin">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/users/admin" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/users/admin',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users/admin"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users/admin'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETusers-admin">
+            <blockquote>
+            <p>Example response (500):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;error&quot;: {
+        &quot;code&quot;: 500,
+        &quot;message&quot;: &quot;Wrong number of segments&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETusers-admin" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETusers-admin"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETusers-admin"></code></pre>
+</span>
+<span id="execution-error-GETusers-admin" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETusers-admin"></code></pre>
+</span>
+<form id="form-GETusers-admin" data-method="GET"
+      data-path="users/admin"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETusers-admin', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>users/admin</code></b>
+        </p>
+                <p>
+            <label id="auth-GETusers-admin" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETusers-admin"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="user-management-DELETEusers--uuid-">Delete user</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEusers--uuid-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost/authenticate/users/ut" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost/authenticate/users/ut',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users/ut"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users/ut'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEusers--uuid-">
+            <blockquote>
+            <p>Example response (201, Succesvol opgeslagen):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Gebruiker opgeslagen&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, gebruiker niet gevonden):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Gebruiker niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Ongeldig aanvraag):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Ongeldige aanvraag&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Niet toegestaan):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet toegestaan&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEusers--uuid-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEusers--uuid-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEusers--uuid-"></code></pre>
+</span>
+<span id="execution-error-DELETEusers--uuid-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEusers--uuid-"></code></pre>
+</span>
+<form id="form-DELETEusers--uuid-" data-method="DELETE"
+      data-path="users/{uuid}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEusers--uuid-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>users/{uuid}</code></b>
+        </p>
+                <p>
+            <label id="auth-DELETEusers--uuid-" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="DELETEusers--uuid-"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="DELETEusers--uuid-"
+               value="ut"
+               data-component="url" hidden>
+    <br>
+
+            </p>
+                    </form>
+
+            <h2 id="user-management-GETusers-admin-trashed">Summary of trashed users</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETusers-admin-trashed">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/authenticate/users/admin/trashed" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/authenticate/users/admin/trashed',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users/admin/trashed"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users/admin/trashed'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETusers-admin-trashed">
+            <blockquote>
+            <p>Example response (500):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;error&quot;: {
+        &quot;code&quot;: 500,
+        &quot;message&quot;: &quot;Wrong number of segments&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETusers-admin-trashed" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETusers-admin-trashed"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETusers-admin-trashed"></code></pre>
+</span>
+<span id="execution-error-GETusers-admin-trashed" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETusers-admin-trashed"></code></pre>
+</span>
+<form id="form-GETusers-admin-trashed" data-method="GET"
+      data-path="users/admin/trashed"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETusers-admin-trashed', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>users/admin/trashed</code></b>
+        </p>
+                <p>
+            <label id="auth-GETusers-admin-trashed" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETusers-admin-trashed"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="user-management-POSTusers-admin-restore">Restore deleted user</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTusers-admin-restore">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/users/admin/restore" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/users/admin/restore',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users/admin/restore"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users/admin/restore'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTusers-admin-restore">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Restore successfully&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTusers-admin-restore" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTusers-admin-restore"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTusers-admin-restore"></code></pre>
+</span>
+<span id="execution-error-POSTusers-admin-restore" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTusers-admin-restore"></code></pre>
+</span>
+<form id="form-POSTusers-admin-restore" data-method="POST"
+      data-path="users/admin/restore"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTusers-admin-restore', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>users/admin/restore</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTusers-admin-restore" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTusers-admin-restore"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+            <h2 id="user-management-PUTusers--uuid-">Update user</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-PUTusers--uuid-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost/authenticate/users/qui" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"email\": \"dolores\",
+    \"password\": \"quo\",
+    \"role\": 9
+}"
+</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://localhost/authenticate/users/qui',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'email' =&gt; 'dolores',
+            'password' =&gt; 'quo',
+            'role' =&gt; 9,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users/qui"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "email": "dolores",
+    "password": "quo",
+    "role": 9
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users/qui'
+payload = {
+    "email": "dolores",
+    "password": "quo",
+    "role": 9
+}
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTusers--uuid-">
+            <blockquote>
+            <p>Example response (201, Succesvol opgeslagen):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Gebruiker opgeslagen&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, gebruiker niet gevonden):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Gebruiker niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Ongeldig aanvraag):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Ongeldige aanvraag&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Niet toegestaan):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet toegestaan&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTusers--uuid-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTusers--uuid-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTusers--uuid-"></code></pre>
+</span>
+<span id="execution-error-PUTusers--uuid-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTusers--uuid-"></code></pre>
+</span>
+<form id="form-PUTusers--uuid-" data-method="PUT"
+      data-path="users/{uuid}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTusers--uuid-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>users/{uuid}</code></b>
+        </p>
+                <p>
+            <label id="auth-PUTusers--uuid-" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="PUTusers--uuid-"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="uuid"
+               data-endpoint="PUTusers--uuid-"
+               value="qui"
+               data-component="url" hidden>
+    <br>
+
+            </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="PUTusers--uuid-"
+               value="dolores"
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="password"
+               data-endpoint="PUTusers--uuid-"
+               value="quo"
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>role</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="role"
+               data-endpoint="PUTusers--uuid-"
+               value="9"
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
+
+            <h2 id="user-management-POSTusers">Create new user</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTusers">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/authenticate/users" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"email\": \"quos\",
+    \"password\": \"esse\",
+    \"role\": 2
+}"
+</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/authenticate/users',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'email' =&gt; 'quos',
+            'password' =&gt; 'esse',
+            'role' =&gt; 2,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "email": "quos",
+    "password": "esse",
+    "role": 2
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users'
+payload = {
+    "email": "quos",
+    "password": "esse",
+    "role": 2
+}
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTusers">
+            <blockquote>
+            <p>Example response (201, Succesvol opgeslagen):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Gebruiker opgeslagen&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, gebruiker niet gevonden):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Gebruiker niet gevonden&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, Ongeldig aanvraag):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Ongeldige aanvraag&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Niet geautoriseerd):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Niet geautoriseerd&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTusers" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTusers"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTusers"></code></pre>
+</span>
+<span id="execution-error-POSTusers" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTusers"></code></pre>
+</span>
+<form id="form-POSTusers" data-method="POST"
+      data-path="users"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTusers', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>users</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTusers" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTusers"
+                                                                data-component="header"></label>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTusers"
+               value="quos"
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="password"
+               data-endpoint="POSTusers"
+               value="esse"
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>role</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="role"
+               data-endpoint="POSTusers"
+               value="2"
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
+
+            <h2 id="user-management-DELETEusers-admin-force-delete">Force delete device</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEusers-admin-force-delete">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost/authenticate/users/admin/force-delete" \
+    --header "Authorization: Bearer {TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost/authenticate/users/admin/force-delete',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/authenticate/users/admin/force-delete"
+);
+
+const headers = {
+    "Authorization": "Bearer {TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost/authenticate/users/admin/force-delete'
+headers = {
+  'Authorization': 'Bearer {TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEusers-admin-force-delete">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;Deleted Successfully&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, not found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;User not found&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-DELETEusers-admin-force-delete" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEusers-admin-force-delete"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEusers-admin-force-delete"></code></pre>
+</span>
+<span id="execution-error-DELETEusers-admin-force-delete" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEusers-admin-force-delete"></code></pre>
+</span>
+<form id="form-DELETEusers-admin-force-delete" data-method="DELETE"
+      data-path="users/admin/force-delete"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEusers-admin-force-delete', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>users/admin/force-delete</code></b>
+        </p>
+                <p>
+            <label id="auth-DELETEusers-admin-force-delete" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="DELETEusers-admin-force-delete"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+    
+
+        
+    </div>
+    <div class="dark-box">
+                    <div class="lang-selector">
+                                                        <button type="button" class="lang-button" data-language-name="bash">bash</button>
+                                                        <button type="button" class="lang-button" data-language-name="php">php</button>
+                                                        <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+                                                        <button type="button" class="lang-button" data-language-name="python">python</button>
+                            </div>
+            </div>
+</div>
+</body>
+</html>

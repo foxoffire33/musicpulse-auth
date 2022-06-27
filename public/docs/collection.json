@@ -1,0 +1,1361 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "localhost"
+        }
+    ],
+    "info": {
+        "name": "DXMusic Authenticatie API",
+        "_postman_id": "d589182e-8c7f-426f-9563-d3ed6860db59",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "description": "\nAPIs for authenticateion",
+            "item": [
+                {
+                    "name": "Basic login",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "\/",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/\/"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"development@dxmusic.nl\",\"password\":\"voluptatem\",\"deviceToken\":\"aliquid\"}"
+                        },
+                        "description": "This is used for first time authentication. when your user has the role <b>Deivce<\/b> the devoceToken parameter is required",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"token\": \"String\"\n}\n @response 401 \"error\": {\n \"code\": 401,\n \"message\": \"Invalid credentials.\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 429,
+                            "body": "error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Renew token",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "jwt",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/jwt"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "With this endpoint you can request an new token, the current one should be valid."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"token\": \"String\"\n}\n @response 401 \"error\": {\n \"code\": 401,\n \"message\": \"Unauthorized.\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 429,
+                            "body": "error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Devices management",
+            "description": "APIs for managing devices and comulicateing with devices.",
+            "item": [
+                {
+                    "name": "Summary of all user devices",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet geautoriseerd\"}",
+                            "name": "Niet geautoriseerd"
+                        },
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "status 200\n[{\n\"deviceID\": \"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",\n\"deviceName\": \"Luxe mp3 speler\",\n\"deviceToken\": \"e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",\n\"deviceOS\": \"IOS\",\n\"OSVersion\": 15.2,\n\"AppVersion\": 1.2,\n}]",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "View user device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/:id",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "veniam",
+                                    "description": "uuid required"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"message\": \"Created Successfully\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Niet gevonden\"}",
+                            "name": "not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthirzed\"}",
+                            "name": "unauthirzed"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"The given data was invalid\"}",
+                            "name": "error"
+                        },
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "status 200\n{\n\"deviceID\": \"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",\n\"deviceName\": \"Luxe mp3 speler\",\n\"deviceToken\": \"e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",\n\"deviceOS\": \"IOS\",\n\"OSVersion\": 15.2,\n\"AppVersion\": 1.2,\n},",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Summary of all devices",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/admin",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/admin"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 500,
+                            "body": "{\"error\":{\"code\":500,\"message\":\"Wrong number of segments\"}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete an device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/:id",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "dolorem",
+                                    "description": "uuid required"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"Deleted Successfully\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Apparaat niet gevonden\"}",
+                            "name": "apparaat niet gevonden"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet geautoriseerd\"}",
+                            "name": "Niet geautoriseerd"
+                        }
+                    ]
+                },
+                {
+                    "name": "Summary of trashed devices",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/admin\/trashed",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/admin\/trashed"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 500,
+                            "body": "{\"error\":{\"code\":500,\"message\":\"Wrong number of segments\"}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create new device for user",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"deviceID\":\"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",\"deviceName\":\"Luxe mp3 speler\",\"deviceToken\":\"12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",\"deviceOS\":\"IOS\",\"OSVersion\":15.2,\"AppVersion\":1.2}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"message\": \"Created Successfully\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Niet gevonden\"}",
+                            "name": "not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthirzed\"}",
+                            "name": "unauthirzed"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"The given data was invalid\"}",
+                            "name": "error"
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore deleted device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/admin\/restore",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/admin\/restore"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"Restore successfully\"}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update existing device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/:id",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "dolor",
+                                    "description": "uuid required"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"deviceID\":\"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",\"deviceName\":\"Luxe mp3 speler\",\"deviceToken\":\"12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",\"deviceOS\":\"IOS\",\"OSVersion\":15.2,\"AppVersion\":1.2}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"message\": \"Updated Successfully\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Niet gevonden\"}",
+                            "name": "not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthirzed\"}",
+                            "name": "unauthirzed"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"The given data was invalid\"}",
+                            "name": "error"
+                        }
+                    ]
+                },
+                {
+                    "name": "Force delete device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/admin\/force-delete",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/admin\/force-delete"
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"Deleted Successfully\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Apparaat niet gevonden\"}",
+                            "name": "apparaat niet gevonden"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet geautoriseerd\"}",
+                            "name": "Niet geautoriseerd"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "General",
+            "description": "",
+            "item": [
+                {
+                    "name": "Get API version",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "\/",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/\/"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"application\":\"DXMusic Authenticate API\",\"version\":\"0.1\"}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Push Notifications",
+            "description": "APIs for sending push notifications,",
+            "item": [
+                {
+                    "name": "Logout all devices",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/admin\/notification\/token",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/admin\/notification\/token"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"alert send.\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Device not found\"}",
+                            "name": "device not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Bad request\"}",
+                            "name": "bad request"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthorized request\"}",
+                            "name": "Unauthorized request"
+                        }
+                    ]
+                },
+                {
+                    "name": "Send alert to device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/:uuid\/notification\/alert",
+                            "query": [
+                                {
+                                    "key": "uuid",
+                                    "value": "et",
+                                    "description": "uuid The uuid of the Device.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/:uuid\/notification\/alert?uuid=et",
+                            "variable": [
+                                {
+                                    "id": "uuid",
+                                    "key": "uuid",
+                                    "value": "id",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"alert send.\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Device not found\"}",
+                            "name": "device not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Bad request\"}",
+                            "name": "bad request"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthorized request\"}",
+                            "name": "Unauthorized request"
+                        }
+                    ]
+                },
+                {
+                    "name": "Refresh playlists on device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/:uuid\/notification\/playlists",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/:uuid\/notification\/playlists",
+                            "variable": [
+                                {
+                                    "id": "uuid",
+                                    "key": "uuid",
+                                    "value": "iure",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"uuid\":\"alias\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"alert send.\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Device not found\"}",
+                            "name": "device not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Bad request\"}",
+                            "name": "bad request"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthorized request\"}",
+                            "name": "Unauthorized request"
+                        }
+                    ]
+                },
+                {
+                    "name": "Logout device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/:uuid\/notification\/token",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/:uuid\/notification\/token",
+                            "variable": [
+                                {
+                                    "id": "uuid",
+                                    "key": "uuid",
+                                    "value": "minima",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"uuid\":\"voluptatem\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"alert send.\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Device not found\"}",
+                            "name": "device not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Bad request\"}",
+                            "name": "bad request"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthorized request\"}",
+                            "name": "Unauthorized request"
+                        }
+                    ]
+                },
+                {
+                    "name": "Send alert to all devices",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "devices\/admin\/notification\/alert",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/devices\/admin\/notification\/alert"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"alert send.\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Device not found\"}",
+                            "name": "device not found"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Bad request\"}",
+                            "name": "bad request"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Unauthorized request\"}",
+                            "name": "Unauthorized request"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "User management",
+            "description": "\nAPIs for managing users",
+            "item": [
+                {
+                    "name": "Summary of all users",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Ongeldige aanvraag\"}",
+                            "name": "Ongeldig aanvraag"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet toegestaan\"}",
+                            "name": "Niet toegestaan"
+                        },
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 500,
+                            "body": "{\"error\":{\"code\":500,\"message\":\"Wrong number of segments\"}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "View user",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users\/:uuid",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users\/:uuid",
+                            "variable": [
+                                {
+                                    "id": "uuid",
+                                    "key": "uuid",
+                                    "value": "ut",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Gebruiker niet gevonden\"}",
+                            "name": "gebruiker niet gevonden"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Ongeldige aanvraag\"}",
+                            "name": "Ongeldig aanvraag"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet toegestaan\"}",
+                            "name": "Niet toegestaan"
+                        },
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 500,
+                            "body": "{\"error\":{\"code\":500,\"message\":\"Static route \\\"\\\/users\\\/admin\\\" is shadowed by previously defined variable route \\\"\\\/users\\\/([^\\\/]+)\\\" for method \\\"GET\\\"\"}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Summary of all devices",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users\/admin",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users\/admin"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 500,
+                            "body": "{\"error\":{\"code\":500,\"message\":\"Wrong number of segments\"}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete user",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users\/:uuid",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users\/:uuid",
+                            "variable": [
+                                {
+                                    "id": "uuid",
+                                    "key": "uuid",
+                                    "value": "ut",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"message\": \"Gebruiker opgeslagen\"}",
+                            "name": "Succesvol opgeslagen"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Gebruiker niet gevonden\"}",
+                            "name": "gebruiker niet gevonden"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Ongeldige aanvraag\"}",
+                            "name": "Ongeldig aanvraag"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet toegestaan\"}",
+                            "name": "Niet toegestaan"
+                        }
+                    ]
+                },
+                {
+                    "name": "Summary of trashed users",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users\/admin\/trashed",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users\/admin\/trashed"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                }
+                            ],
+                            "code": 500,
+                            "body": "{\"error\":{\"code\":500,\"message\":\"Wrong number of segments\"}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore deleted user",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users\/admin\/restore",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users\/admin\/restore"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"Restore successfully\"}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update user",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users\/:uuid",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users\/:uuid",
+                            "variable": [
+                                {
+                                    "id": "uuid",
+                                    "key": "uuid",
+                                    "value": "qui",
+                                    "description": ""
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"dolores\",\"password\":\"quo\",\"role\":9}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"message\": \"Gebruiker opgeslagen\"}",
+                            "name": "Succesvol opgeslagen"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Gebruiker niet gevonden\"}",
+                            "name": "gebruiker niet gevonden"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Ongeldige aanvraag\"}",
+                            "name": "Ongeldig aanvraag"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet toegestaan\"}",
+                            "name": "Niet toegestaan"
+                        }
+                    ]
+                },
+                {
+                    "name": "Create new user",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"quos\",\"password\":\"esse\",\"role\":2}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"message\": \"Gebruiker opgeslagen\"}",
+                            "name": "Succesvol opgeslagen"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Gebruiker niet gevonden\"}",
+                            "name": "gebruiker niet gevonden"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Ongeldige aanvraag\"}",
+                            "name": "Ongeldig aanvraag"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"message\": \"Niet geautoriseerd\"}",
+                            "name": "Niet geautoriseerd"
+                        }
+                    ]
+                },
+                {
+                    "name": "Force delete device",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "users\/admin\/force-delete",
+                            "query": [],
+                            "raw": "http:\/\/{{baseUrl}}\/users\/admin\/force-delete"
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"Deleted Successfully\"}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"User not found\"}",
+                            "name": "not found"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer"
+    }
+}

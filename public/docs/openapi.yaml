@@ -1,0 +1,1865 @@
+openapi: 3.0.3
+info:
+  title: 'DXMusic Authenticatie API'
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost/authenticate'
+paths:
+  /:
+    post:
+      summary: 'Basic login'
+      description: 'This is used for first time authentication. when your user has the role <b>Deivce</b> the devoceToken parameter is required'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n \"token\": \"String\"\n}\n @response 401 \"error\": {\n \"code\": 401,\n \"message\": \"Invalid credentials.\"\n}"
+        429:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}"
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'E-mail of the user.'
+                  example: development@dxmusic.nl
+                password:
+                  type: string
+                  description: 'Password of the user.'
+                  example: voluptatem
+                deviceToken:
+                  type: string
+                  description: 'Required when user role is deivce.'
+                  example: aliquid
+              required:
+                - email
+                - password
+      security: []
+    get:
+      summary: 'Get API version'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  application: 'DXMusic Authenticate API'
+                  version: '0.1'
+                properties:
+                  application:
+                    type: string
+                    example: 'DXMusic Authenticate API'
+                  version:
+                    type: string
+                    example: '0.1'
+      tags:
+        - General
+      security: []
+  /jwt:
+    get:
+      summary: 'Renew token'
+      description: 'With this endpoint you can request an new token, the current one should be valid.'
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n \"token\": \"String\"\n}\n @response 401 \"error\": {\n \"code\": 401,\n \"message\": \"Unauthorized.\"\n}"
+        429:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "error\": {\n \"code\": 429,\n \"message\": \"Too Many Attempts.\"\n}"
+      tags:
+        - Authentication
+  /devices:
+    get:
+      summary: 'Summary of all user devices'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        405:
+          description: 'Niet geautoriseerd'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet geautoriseerd'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet geautoriseerd'
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "status 200\n[{\n\"deviceID\": \"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",\n\"deviceName\": \"Luxe mp3 speler\",\n\"deviceToken\": \"e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",\n\"deviceOS\": \"IOS\",\n\"OSVersion\": 15.2,\n\"AppVersion\": 1.2,\n}]"
+      tags:
+        - 'Devices management'
+    post:
+      summary: 'Create new device for user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Created Successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Created Successfully'
+        404:
+          description: 'not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet gevonden'
+        405:
+          description: unauthirzed
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthirzed
+                properties:
+                  message:
+                    type: string
+                    example: Unauthirzed
+        422:
+          description: error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid'
+      tags:
+        - 'Devices management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceID:
+                  type: uuid
+                  description: 'Het unique id die door de fabrikant gegenereerd is'
+                  example: 0FDF668C-074A-4A62-BCEC-3CBEDE25C524
+                deviceName:
+                  type: string
+                  description: 'De naam die de gebruiker aan eht Appraat heeft gegeven'
+                  example: 'Luxe mp3 speler'
+                deviceToken:
+                  type: string
+                  description: 'De token voor push notificaties'
+                  example: 12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315
+                deviceOS:
+                  type: string
+                  description: 'Het bestuurings systeem dat het Apprraat draait'
+                  example: IOS
+                OSVersion:
+                  type: number
+                  description: 'de versie van het bestuuringssysteem'
+                  example: 15.2
+                AppVersion:
+                  type: number
+                  description: 'de versie van de app,'
+                  example: 1.2
+              required:
+                - deviceID
+                - deviceName
+                - deviceToken
+                - deviceOS
+                - OSVersion
+                - AppVersion
+  '/devices/{id}':
+    get:
+      summary: 'View user device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Created Successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Created Successfully'
+        404:
+          description: 'not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet gevonden'
+        405:
+          description: unauthirzed
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthirzed
+                properties:
+                  message:
+                    type: string
+                    example: Unauthirzed
+        422:
+          description: error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid'
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "status 200\n{\n\"deviceID\": \"0FDF668C-074A-4A62-BCEC-3CBEDE25C524\",\n\"deviceName\": \"Luxe mp3 speler\",\n\"deviceToken\": \"e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315\",\n\"deviceOS\": \"IOS\",\n\"OSVersion\": 15.2,\n\"AppVersion\": 1.2,\n},"
+      tags:
+        - 'Devices management'
+    delete:
+      summary: 'Delete an device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Deleted Successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Deleted Successfully'
+        404:
+          description: 'apparaat niet gevonden'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Apparaat niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Apparaat niet gevonden'
+        405:
+          description: 'Niet geautoriseerd'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet geautoriseerd'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet geautoriseerd'
+      tags:
+        - 'Devices management'
+    put:
+      summary: 'Update existing device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Updated Successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Updated Successfully'
+        404:
+          description: 'not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet gevonden'
+        405:
+          description: unauthirzed
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthirzed
+                properties:
+                  message:
+                    type: string
+                    example: Unauthirzed
+        422:
+          description: error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid'
+      tags:
+        - 'Devices management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceID:
+                  type: uuid
+                  description: 'Het unique id die door de fabrikant gegenereerd is'
+                  example: 0FDF668C-074A-4A62-BCEC-3CBEDE25C524
+                deviceName:
+                  type: string
+                  description: 'De naam die de gebruiker aan eht Appraat heeft gegeven'
+                  example: 'Luxe mp3 speler'
+                deviceToken:
+                  type: string
+                  description: 'De token voor push notificaties'
+                  example: 12402e6b4953f2f5dc9a409506a2932c9abcf62da7751ca23ba23f734c07c315
+                deviceOS:
+                  type: string
+                  description: 'Het bestuurings systeem dat het Apprraat draait'
+                  example: IOS
+                OSVersion:
+                  type: number
+                  description: 'de versie van het bestuuringssysteem'
+                  example: 15.2
+                AppVersion:
+                  type: number
+                  description: 'de versie van de app,'
+                  example: 1.2
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Optional parameter. uuid required'
+        required: true
+        schema:
+          type: string
+        examples:
+          omitted:
+            summary: 'When the value is omitted'
+            value: ''
+          present:
+            summary: 'When the value is present'
+            value: veniam
+  /devices/admin:
+    get:
+      summary: 'Summary of all devices'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    code: 500
+                    message: 'Wrong number of segments'
+                properties:
+                  error:
+                    type: object
+                    example:
+                      code: 500
+                      message: 'Wrong number of segments'
+      tags:
+        - 'Devices management'
+  /devices/admin/trashed:
+    get:
+      summary: 'Summary of trashed devices'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    code: 500
+                    message: 'Wrong number of segments'
+                properties:
+                  error:
+                    type: object
+                    example:
+                      code: 500
+                      message: 'Wrong number of segments'
+      tags:
+        - 'Devices management'
+  /devices/admin/restore:
+    post:
+      summary: 'Restore deleted device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Restore successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Restore successfully'
+      tags:
+        - 'Devices management'
+  /devices/admin/force-delete:
+    delete:
+      summary: 'Force delete device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Deleted Successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Deleted Successfully'
+        404:
+          description: 'apparaat niet gevonden'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Apparaat niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Apparaat niet gevonden'
+        405:
+          description: 'Niet geautoriseerd'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet geautoriseerd'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet geautoriseerd'
+      tags:
+        - 'Devices management'
+  /devices/admin/notification/token:
+    post:
+      summary: 'Logout all devices'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'alert send.'
+                properties:
+                  message:
+                    type: string
+                    example: 'alert send.'
+        404:
+          description: 'device not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Device not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Device not found'
+        422:
+          description: 'bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Bad request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad request'
+        405:
+          description: 'Unauthorized request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Unauthorized request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized request'
+      tags:
+        - 'Push Notifications'
+  '/devices/{uuid}/notification/alert':
+    post:
+      summary: 'Send alert to device'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: uuid
+          description: 'uuid The uuid of the Device.'
+          example: et
+          required: true
+          schema:
+            type: string
+            description: 'uuid The uuid of the Device.'
+            example: et
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'alert send.'
+                properties:
+                  message:
+                    type: string
+                    example: 'alert send.'
+        404:
+          description: 'device not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Device not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Device not found'
+        422:
+          description: 'bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Bad request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad request'
+        405:
+          description: 'Unauthorized request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Unauthorized request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized request'
+      tags:
+        - 'Push Notifications'
+    parameters:
+      -
+        in: path
+        name: uuid
+        description: ''
+        example: id
+        required: true
+        schema:
+          type: string
+  '/devices/{uuid}/notification/playlists':
+    post:
+      summary: 'Refresh playlists on device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'alert send.'
+                properties:
+                  message:
+                    type: string
+                    example: 'alert send.'
+        404:
+          description: 'device not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Device not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Device not found'
+        422:
+          description: 'bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Bad request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad request'
+        405:
+          description: 'Unauthorized request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Unauthorized request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized request'
+      tags:
+        - 'Push Notifications'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uuid:
+                  type: uuid
+                  description: 'The uuid of the Device.'
+                  example: alias
+              required:
+                - uuid
+    parameters:
+      -
+        in: path
+        name: uuid
+        description: ''
+        example: iure
+        required: true
+        schema:
+          type: string
+  '/devices/{uuid}/notification/token':
+    post:
+      summary: 'Logout device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'alert send.'
+                properties:
+                  message:
+                    type: string
+                    example: 'alert send.'
+        404:
+          description: 'device not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Device not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Device not found'
+        422:
+          description: 'bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Bad request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad request'
+        405:
+          description: 'Unauthorized request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Unauthorized request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized request'
+      tags:
+        - 'Push Notifications'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uuid:
+                  type: uuid
+                  description: 'The uuid of the Device.'
+                  example: voluptatem
+              required:
+                - uuid
+    parameters:
+      -
+        in: path
+        name: uuid
+        description: ''
+        example: minima
+        required: true
+        schema:
+          type: string
+  /devices/admin/notification/alert:
+    post:
+      summary: 'Send alert to all devices'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'alert send.'
+                properties:
+                  message:
+                    type: string
+                    example: 'alert send.'
+        404:
+          description: 'device not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Device not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Device not found'
+        422:
+          description: 'bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Bad request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad request'
+        405:
+          description: 'Unauthorized request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Unauthorized request'
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized request'
+      tags:
+        - 'Push Notifications'
+  /users:
+    get:
+      summary: 'Summary of all users'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        422:
+          description: 'Ongeldig aanvraag'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Ongeldige aanvraag'
+                properties:
+                  message:
+                    type: string
+                    example: 'Ongeldige aanvraag'
+        405:
+          description: 'Niet toegestaan'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet toegestaan'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet toegestaan'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    code: 500
+                    message: 'Wrong number of segments'
+                properties:
+                  error:
+                    type: object
+                    example:
+                      code: 500
+                      message: 'Wrong number of segments'
+      tags:
+        - 'User management'
+    post:
+      summary: 'Create new user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: 'Succesvol opgeslagen'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Gebruiker opgeslagen'
+                properties:
+                  message:
+                    type: string
+                    example: 'Gebruiker opgeslagen'
+        404:
+          description: 'gebruiker niet gevonden'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Gebruiker niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Gebruiker niet gevonden'
+        422:
+          description: 'Ongeldig aanvraag'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Ongeldige aanvraag'
+                properties:
+                  message:
+                    type: string
+                    example: 'Ongeldige aanvraag'
+        405:
+          description: 'Niet geautoriseerd'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet geautoriseerd'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet geautoriseerd'
+      tags:
+        - 'User management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: ''
+                  example: quos
+                password:
+                  type: string
+                  description: ''
+                  example: esse
+                role:
+                  type: integer
+                  description: ''
+                  example: 2
+              required:
+                - email
+                - password
+  '/users/{uuid}':
+    get:
+      summary: 'View user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        404:
+          description: 'gebruiker niet gevonden'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Gebruiker niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Gebruiker niet gevonden'
+        422:
+          description: 'Ongeldig aanvraag'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Ongeldige aanvraag'
+                properties:
+                  message:
+                    type: string
+                    example: 'Ongeldige aanvraag'
+        405:
+          description: 'Niet toegestaan'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet toegestaan'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet toegestaan'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    code: 500
+                    message: 'Static route "/users/admin" is shadowed by previously defined variable route "/users/([^/]+)" for method "GET"'
+                properties:
+                  error:
+                    type: object
+                    example:
+                      code: 500
+                      message: 'Static route "/users/admin" is shadowed by previously defined variable route "/users/([^/]+)" for method "GET"'
+      tags:
+        - 'User management'
+    delete:
+      summary: 'Delete user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: 'Succesvol opgeslagen'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Gebruiker opgeslagen'
+                properties:
+                  message:
+                    type: string
+                    example: 'Gebruiker opgeslagen'
+        404:
+          description: 'gebruiker niet gevonden'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Gebruiker niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Gebruiker niet gevonden'
+        422:
+          description: 'Ongeldig aanvraag'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Ongeldige aanvraag'
+                properties:
+                  message:
+                    type: string
+                    example: 'Ongeldige aanvraag'
+        405:
+          description: 'Niet toegestaan'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet toegestaan'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet toegestaan'
+      tags:
+        - 'User management'
+    put:
+      summary: 'Update user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: 'Succesvol opgeslagen'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Gebruiker opgeslagen'
+                properties:
+                  message:
+                    type: string
+                    example: 'Gebruiker opgeslagen'
+        404:
+          description: 'gebruiker niet gevonden'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Gebruiker niet gevonden'
+                properties:
+                  message:
+                    type: string
+                    example: 'Gebruiker niet gevonden'
+        422:
+          description: 'Ongeldig aanvraag'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Ongeldige aanvraag'
+                properties:
+                  message:
+                    type: string
+                    example: 'Ongeldige aanvraag'
+        405:
+          description: 'Niet toegestaan'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Niet toegestaan'
+                properties:
+                  message:
+                    type: string
+                    example: 'Niet toegestaan'
+      tags:
+        - 'User management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: ''
+                  example: dolores
+                password:
+                  type: string
+                  description: ''
+                  example: quo
+                role:
+                  type: integer
+                  description: ''
+                  example: 9
+              required:
+                - email
+                - password
+    parameters:
+      -
+        in: path
+        name: uuid
+        description: ''
+        example: ut
+        required: true
+        schema:
+          type: string
+  /users/admin:
+    get:
+      summary: 'Summary of all devices'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    code: 500
+                    message: 'Wrong number of segments'
+                properties:
+                  error:
+                    type: object
+                    example:
+                      code: 500
+                      message: 'Wrong number of segments'
+      tags:
+        - 'User management'
+  /users/admin/trashed:
+    get:
+      summary: 'Summary of trashed users'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    code: 500
+                    message: 'Wrong number of segments'
+                properties:
+                  error:
+                    type: object
+                    example:
+                      code: 500
+                      message: 'Wrong number of segments'
+      tags:
+        - 'User management'
+  /users/admin/restore:
+    post:
+      summary: 'Restore deleted user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Restore successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Restore successfully'
+      tags:
+        - 'User management'
+  /users/admin/force-delete:
+    delete:
+      summary: 'Force delete device'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Deleted Successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Deleted Successfully'
+        404:
+          description: 'not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+      tags:
+        - 'User management'
+tags:
+  -
+    name: Authentication
+    description: "\nAPIs for authenticateion"
+  -
+    name: 'Devices management'
+    description: 'APIs for managing devices and comulicateing with devices.'
+  -
+    name: General
+    description: ''
+  -
+    name: 'Push Notifications'
+    description: 'APIs for sending push notifications,'
+  -
+    name: 'User management'
+    description: "\nAPIs for managing users"
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: ''
+security:
+  -
+    default: []
