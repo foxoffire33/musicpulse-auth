@@ -30,7 +30,7 @@ class DevicesController extends Controller
      */
     public function index()
     {
-        return Device::whereHas('users', fn($builder) => $builder->where(['user_id' => Auth::id()]))->paginate(Controller::PAGINATE_SIZE);
+        return Device::paginate(Controller::PAGINATE_SIZE);
     }
 
     /**

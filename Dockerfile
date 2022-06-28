@@ -1,6 +1,6 @@
 FROM php:8.0-fpm-alpine
 
-RUN apk add --no-cache nginx wget sqlite
+RUN apk add --no-cache nginx wget sqlite php8-sodium
 
 RUN mkdir /db
 RUN touch /db/database.sqlite
