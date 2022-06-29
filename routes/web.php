@@ -12,9 +12,11 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+//$router->get('/alert/{deviceToken}', 'NotificationsController@testSendToDevice');
 
 //todo router bestand ga ik nog aanpassen
 $router->group([], function () use ($router) {
+
 
     /**
      * @group General
@@ -61,7 +63,7 @@ $router->group([], function () use ($router) {
         $router->put('/{uuid}', 'UsersController@update');
     });
 
-    $router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->group(['middleware' => ['auth']], function () use ($router) {
 
         //admin routers
         $router->group(['prefix' => 'devices/admin'], function () use ($router) {
@@ -87,7 +89,8 @@ $router->group([], function () use ($router) {
              * Notifications routes voor one device
              * @Ratelimiting 1 request in 5 minutes
              */
-            $router->group(['prefix' => '{uuid}/notification', 'middleware' => ['throttle:1,20']], function () use ($router) {
+            //'middleware' => ['throttle:1,20']
+            $router->group(['prefix' => '{uuid}/notification'], function () use ($router) {
                 $router->post('/alert', 'NotificationsController@sendAlertToDevice');
                 $router->post('/playlists', 'NotificationsController@updatePlaylistsOnDevice');
                 $router->post('/token', 'NotificationsController@updateTokenOnDevice');

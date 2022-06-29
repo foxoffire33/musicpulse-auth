@@ -11,6 +11,7 @@ use Illuminate\Queue\Queue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use \Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @group Push Notifications
@@ -43,6 +44,14 @@ class NotificationsController extends Controller
     {
         $device = Device::findOrFail($uuid);
         dispatch(new APSAlert($device->device_token,$this->alertValidator($request)));
+        return response(['message' => "Alert send to device"]);
+    }
+
+    public function testSendToDevice(string $deviceToken) {
+        dispatch(new APSAlert($deviceToken,[
+            'title' => "Test notification",
+            'body' => "This is a test ignore this notification"
+        ]));
         return response(['message' => "Alert send to device"]);
     }
 

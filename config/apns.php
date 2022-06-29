@@ -1,8 +1,9 @@
 <?php
 
 return [
-    'host' => env('APNS_HOST_NAME'),
-    'cert' => base_path() . env('CERTIFICATE_FILE_NAME'),
-    'key' => base_path() . env('CERTIFICATE_KEY_FILE_NAME'),
-    'topic' => env('APNS_TOPIC')
+    'key' => env('AUTH_KEY_PATH'),
+    'auth_key' => env('AUTH_KEY_ID'),
+    'team' => env('TEAM_ID'),
+    'topic' => env('APNS_TOPIC'),
+    'sound' =>  env('NOTIFICATION_SOUND','default')
 ];

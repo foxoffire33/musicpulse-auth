@@ -47,6 +47,7 @@ class AuthServiceProvider extends ServiceProvider
                     //An error while decoding token.
                 }
             }
+         //   return new GenericUser(['name' => 'generic','email' => 'test@exsample.com','role' => 0]);
         });
     }
 }

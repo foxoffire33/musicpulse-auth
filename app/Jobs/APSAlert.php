@@ -6,17 +6,11 @@ use GuzzleHttp\Client;
 
 class APSAlert extends Job
 {
-    private array $data = [
+    private array $payload = [
         'aps' => [
             'alert' => [],
-            'sound' => 'default'
+            'sound' => ''
         ]
-    ];
-
-    private $headers = [
-        'Content-Type: application/json',
-        'Accept: application/json',
-        'apns-push-type: alert'
     ];
 
     private string $deviceToken;
@@ -30,19 +24,41 @@ class APSAlert extends Job
     {
         //load class variables
         $this->deviceToken = $deviceToken;
-        $this->data['aps']['alert'] = $alert;
-
-        //add dynamic headers
-        $this->headers[] = 'apns-topic: ' . config('apns.topic');
+        $this->payload['aps']['alert'] = $alert;
+        $this->payload['aps']['sound'] = config('apns.sound');
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
-        $this->executeRequest($this->headers,$this->data,$this->deviceToken);
+        $header = base64_encode(json_encode([
+            'alg' => 'ES256',
+            'kid' => config('apns.auth_key')
+        ]));
+
+        $claims = base64_encode(json_encode([
+            'iss' => config('apns.team'),
+            'iat' => time()
+        ]));
+
+        $pkey = openssl_pkey_get_private('file://' . config('apns.key'));
+        openssl_sign("$header.$claims", $signature, $pkey, 'sha256');
+
+        $signed = base64_encode($signature);
+        $signedHeaderData = "$header.$claims.$signed";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+
+            json_encode($this->payload));
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['apns-topic: ' . config('apns.topic'), 'authorization: bearer ' . $signedHeaderData, 'apns-push-type: alert']);
+
+        $url = "https://api.development.push.apple.com/3/device/$this->deviceToken";
+        curl_setopt($ch, CURLOPT_URL, "{$url}");
+        $response = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
     }
 }
