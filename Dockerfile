@@ -1,6 +1,7 @@
 FROM php:8.0-fpm-alpine
 
 RUN apk add --no-cache nginx wget sqlite php8-sodium
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
 RUN mkdir /db
 RUN touch /db/database.sqlite
