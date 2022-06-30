@@ -21,7 +21,7 @@ $router->get('/migrate', function () use ($router) {
 
     Artisan::call('cache:clear');
     Artisan::call('migrate', ['--force' => true]);
-    Artisan::call('db:seed', ['--force' => true]);
+  //  Artisan::call('db:seed', ['--force' => true]);
 
     return ['status' => 'done'];
 });
