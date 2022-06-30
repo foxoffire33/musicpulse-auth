@@ -15,6 +15,9 @@ $payload = [
         'sound' => 'pulse-notification.aiff'
     ],
 ];
+
+var_dump(json_encode($payload));exit;
+
 //// Create The JWT
 $header = base64_encode(json_encode(['alg' => 'ES256', 'kid' => AUTH_KEY_ID]));
 $claims = base64_encode(json_encode(['iss' => TEAM_ID, 'iat' => time()]));
@@ -25,13 +28,16 @@ openssl_sign("$header.$claims", $signature, $pkey, 'sha256');
 $signed = base64_encode($signature);
 $signedHeaderData = "$header.$claims.$signed";
 
+var_dump(json_encode(['alg' => 'ES256', 'kid' => AUTH_KEY_ID]));
+var_dump($header);
+var_dump(json_encode(['iss' => TEAM_ID, 'iat' => time()]));
+exit;
+//var_dump($signedHeaderData);
+
 //Setup curl
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
-curl_setopt($ch, CURLOPT_POSTFIELDS,
-
-    json_encode($payload));
-
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['apns-topic: ' . APNS_TOPIC, 'authorization: bearer ' . $signedHeaderData, 'apns-push-type: alert']);
 //Setting up URL

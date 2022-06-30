@@ -13,7 +13,18 @@
 |
 */
 //$router->get('/alert/{deviceToken}', 'NotificationsController@testSendToDevice');
+use Illuminate\Support\Facades\Artisan;
 
+$router->get('/migrate', function () use ($router) {
+
+    define('STDIN',fopen("php://stdin","r"));
+
+    Artisan::call('cache:clear');
+    Artisan::call('migrate', ['--force' => true]);
+    Artisan::call('db:seed', ['--force' => true]);
+
+    return ['status' => 'done'];
+});
 //todo router bestand ga ik nog aanpassen
 $router->group([], function () use ($router) {
 
